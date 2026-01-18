@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, Enum, DateTime, Boolean, 
     Table
 from sqlalchemy.orm import relationship
 
-from enums import EquipmentCategory, BattleStatus
+from enums import EquipmentCategory, BattleStatus, UserRole
 
 from database import Base
 
@@ -24,6 +24,8 @@ class UserDB(Base):
     hashed_password = Column(String, nullable=False)
     coins = Column(Integer, default=0)
     crystals = Column(Integer, default=0)
+    role = Column(Enum(UserRole), default=UserRole.USER)
+    is_active = Column(Boolean, default=True)
 
     characters = relationship(
         "CharacterDB",
@@ -108,7 +110,6 @@ class UserEquipmentDB(Base):
     user_id = Column(Integer, ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False)
     equipment_id = Column(Integer, ForeignKey('equipments.equipment_id', ondelete='CASCADE'), nullable=False)
 
-    # Индивидуальные свойства экземпляра
     level = Column(Integer, default=1)
     durability = Column(Integer, default=100)
     is_equipped = Column(Boolean, default=False)
